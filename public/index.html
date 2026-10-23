@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#23382d"><meta name="description" content="فروشگاه محصولات پادناکِشت؛ از دل طبیعت دنا">
+<title>پادناکِشت | از دل طبیعت دنا</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="/" aria-label="صفحه اصلی پادناکشت"><span class="brand-mark">پ</span><span><b>پادناکِشت</b><small>از دل طبیعت دنا</small></span></a><button id="cartOpen" class="cart-button" type="button">سبد خرید <span id="cartCount">۰</span></button></header>
+<main class="wrap">
+<section class="hero"><div class="eyebrow">محصولات اهل پادنا</div><h1>طعمِ ساده و آشنای طبیعت</h1><p>محصولات روستایی را مستقیم از پادنا سفارش بده.</p><a href="#catalog" class="hero-link">دیدن محصولات <span>↓</span></a></section>
+<div id="notice" class="notice" role="status" hidden></div>
+<section id="catalogSection"><div class="section-head"><div><span class="eyebrow">انتخاب شما</span><h2 id="catalog">محصولات</h2></div><button id="refresh" class="text-button" type="button">به‌روزرسانی</button></div><div id="products" class="products"><div class="empty">در حال دریافت فهرست محصولات…</div></div></section>
+<section id="cartSection" class="panel" hidden><div class="section-head"><h2>سبد خرید</h2><button id="cartClose" class="text-button" type="button">بستن</button></div><div id="cartItems"></div><div class="subtotal"><span>جمع کالاها</span><b id="subtotal">—</b></div><button id="checkoutOpen" class="primary full" type="button">ادامه برای ثبت سفارش</button></section>
+<section id="checkoutSection" class="panel" hidden><div class="section-head"><h2>اطلاعات سفارش</h2><button id="checkoutClose" class="text-button" type="button">بستن</button></div><form id="checkoutForm" class="form">
+<label>شماره تماس<input name="phone" inputmode="tel" autocomplete="tel" required minlength="8" maxlength="20" placeholder="مثلاً ۰۹۱۳…"></label>
+<label>شهر<input name="city" required maxlength="80" placeholder="شهر محل تحویل"></label>
+<label>روش ارسال<select name="deliveryMethod" required><option value="isfahan">تحویل داخل اصفهان</option><option value="post">پست پیشتاز به شهرهای دیگر</option></select></label>
+<label>نشانی کامل<textarea name="address" required minlength="5" maxlength="500" rows="3" placeholder="خیابان، کوچه، پلاک و جزئیات لازم"></textarea></label>
+<p class="muted small">هزینه ارسال پس از تنظیم مدیر در مبلغ نهایی محاسبه می‌شود. سفارش تا بررسی و تأیید دستی واریز، پرداخت‌شده نیست.</p>
+<button class="primary full" type="submit">ثبت سفارش و رفتن به مرحله پرداخت</button>
+</form></section>
+<section id="paymentSection" class="panel" hidden><span class="eyebrow">مرحله پرداخت</span><h2>واریز کارت‌به‌کارت</h2><div id="paymentDetails"></div><form id="trackingForm" class="form"><label>کد پیگیری واریز<input name="trackingCode" required minlength="4" maxlength="120" placeholder="کد پیگیری تراکنش"></label><button class="primary full" type="submit">ثبت کد پیگیری</button></form><p class="muted small">ثبت کد پیگیری به معنی تأیید پرداخت نیست؛ مدیر پس از بررسی واریز وضعیت سفارش را تغییر می‌دهد.</p></section>
+<section id="myOrdersSection" class="panel" hidden><div class="section-head"><h2>سفارش‌های من</h2><button id="ordersRefresh" class="text-button" type="button">به‌روزرسانی</button></div><div id="myOrders"></div></section>
+<section id="adminSection" class="panel" hidden><div class="section-head"><h2>مدیریت سفارش‌ها</h2><button id="adminRefresh" class="text-button" type="button">به‌روزرسانی</button></div><div id="adminOrders"></div><hr><h3>ثبت یا ویرایش کالا</h3><form id="productForm" class="form"><label>شناسه لاتین کالا<input name="id" required pattern="[a-zA-Z0-9_-]{2,60}" placeholder="مثلاً grape-molasses"></label><label>نام کالا<input name="name" required maxlength="100"></label><label>توضیحات<textarea name="description" maxlength="500" rows="2"></textarea></label><div class="two"><label>قیمت (تومان)<input name="priceToman" type="number" min="1" step="1" required></label><label>موجودی<input name="stock" type="number" min="0" step="0.01" required></label></div><label>واحد فروش<input name="unit" maxlength="20" required placeholder="کیلوگرم، بطری، عدد"></label><button class="primary" type="submit">ذخیره کالا</button></form></section>
+<section class="foot-note"><span>پادناکِشت</span><span>از دل طبیعت دنا</span><a href="https://t.me/padenakesht" target="_blank" rel="noopener">کانال تلگرام</a></section>
+</main><div id="cartScrim" class="scrim" hidden></div><script src="/app.js"></script></body></html>
