@@ -1,0 +1,19 @@
+{
+  "name": "padnakasht-telegram-store",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PadnaKesht Telegram Mini App and order API",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "better-sqlite3": "^11.8.1",
+    "dotenv": "^16.4.7"
+  }
+}
