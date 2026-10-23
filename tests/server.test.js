@@ -28,6 +28,13 @@ test('health and public product endpoints start without secrets', async () => {
     const health = await response.json();
     assert.equal(health.ok, true);
     assert.equal(health.telegramAuthConfigured, false);
+    const configResponse = await fetch('http://127.0.0.1:' + port + '/api/config');
+    assert.equal(configResponse.status, 200);
+    const config = await configResponse.json();
+    assert.equal(config.delivery.feeToman, 0);
+    assert.equal(config.delivery.label, 'ارسال رایگان');
+    assert.equal(config.delivery.isfahan, true);
+    assert.equal(config.delivery.post, true);
     const productsResponse = await fetch('http://127.0.0.1:' + port + '/api/products');
     assert.equal(productsResponse.status, 200);
     assert.deepEqual((await productsResponse.json()).products, []);
