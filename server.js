@@ -58,7 +58,7 @@ function parseTelegramInitData(raw) {
   const authDate = Number(params.get('auth_date'));
   if (!hash || !/^[a-f0-9]{64}$/i.test(hash) || !Number.isFinite(authDate)) throw new Error('INVALID_INIT_DATA');
   if (Math.abs(Date.now() / 1000 - authDate) > 3600) throw new Error('EXPIRED_INIT_DATA');
-  const checkString = [...params.entries()].filter(([key]) => key !== 'hash').map(([key, value]) => [key, value]).sort(([a], [b]) => a.localeCompare(b)).map(([key, value]) => key + '=' + value).join('\n');
+  const checkString = [...params.entries()].filter(([key]) => key !== 'hash').map(([key, value]) => [key, value]).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([key, value]) => key + '=' + value).join('\n');
   const secret = crypto.createHmac('sha256', 'WebAppData').update(process.env.BOT_TOKEN).digest();
   const expected = crypto.createHmac('sha256', secret).update(checkString).digest('hex');
   const a = Buffer.from(hash, 'hex'); const b = Buffer.from(expected, 'hex');
@@ -187,6 +187,7 @@ app.patch('/api/admin/orders/:id', auth, admin, (req, res) => {
   if (status === 'payment_confirmed' && !['awaiting_payment','payment_submitted'].includes(order.status)) return res.status(409).json({ error: 'این سفارش در وضعیت قابل تأیید پرداخت نیست.' });
   if (['preparing','shipped','completed'].includes(status) && !['payment_confirmed','preparing','shipped'].includes(order.status)) return res.status(409).json({ error: 'ابتدا پرداخت را دستی تأیید کنید.' });
   if (order.status === 'cancelled' && status !== 'cancelled') return res.status(409).json({ error: 'سفارش لغوشده قابل بازگردانی به جریان ارسال نیست؛ سفارش جدید ثبت کنید.' });
+  if (status === 'cancelled' && ['shipped','completed'].includes(order.status)) return res.status(409).json({ error: 'سفارش ارسال‌شده یا تکمیل‌شده از این پنل قابل لغو نیست؛ بررسی دستی لازم است.' });
   const changeStatus = db.transaction(() => {
     if (status === 'cancelled' && order.status !== 'cancelled') {
       const lines = JSON.parse(order.items_json);
