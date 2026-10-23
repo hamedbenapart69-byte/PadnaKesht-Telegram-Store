@@ -22,8 +22,8 @@ async function loadProducts(){
 function renderProducts(){
  const root=$('products');
  if(!state.products.length){root.innerHTML='<div class="empty">هنوز کالایی در فروشگاه ثبت نشده است. مدیر باید کالا و قیمت را از پنل مدیریت اضافه کند.</div>';return;}
- root.innerHTML=state.products.map((p,i)=>'<article class="product"><div class="product-symbol">'+symbols[i%symbols.length]+'</div><h3>'+escapeHtml(p.name)+'</h3><p>'+escapeHtml(p.description||'محصولی از پادنا')+'<br>موجودی: '+money(p.stock)+' '+escapeHtml(p.unit)+'</p><div class="product-bottom"><div class="price">'+money(p.price_toman)+'<small>به‌ازای هر '+escapeHtml(p.unit)+'</small></div><button class="primary" data-add="'+escapeHtml(p.id)+'" type="button" '+(Number(p.stock)<=0?'disabled':'')+'>افزودن به سبد</button></div></article>').join('');
- root.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>{const p=state.products.find(x=>x.id===b.dataset.add);if(!p)return;const q=state.cart.get(p.id)||0;if(q+1>Number(p.stock)){note('تعداد انتخابی از موجودی بیشتر است.',true);return;}state.cart.set(p.id,q+1);renderCart();note('به سبد خرید اضافه شد.');}));
+ root.innerHTML=state.products.map((p,i)=>'<article class="product"><div class="product-symbol">'+symbols[i%symbols.length]+'</div><h3>'+escapeHtml(p.name)+'</h3><p>'+escapeHtml(p.description||'محصولی از پادنا')+'<br>وضعیت: موجود'+'</p><div class="product-bottom"><div class="price">'+money(p.price_toman)+'<small>به‌ازای هر '+escapeHtml(p.unit)+'</small></div><button class="primary" data-add="'+escapeHtml(p.id)+'" type="button" '+(Number(p.stock)<=0?'disabled':'')+'>افزودن به سبد</button></div></article>').join('');
+ root.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>{const p=state.products.find(x=>x.id===b.dataset.add);if(!p)return;const q=state.cart.get(p.id)||0;state.cart.set(p.id,q+1);renderCart();note('به سبد خرید اضافه شد.');}));
 }
 function renderCart(){
  const items=[...state.cart.entries()].map(([id,q])=>({p:state.products.find(p=>p.id===id),q})).filter(x=>x.p);
@@ -31,7 +31,7 @@ function renderCart(){
  $('cartItems').innerHTML=items.length?items.map(({p,q})=>'<div class="cart-row"><div><b>'+escapeHtml(p.name)+'</b><small>'+money(p.price_toman)+' / '+escapeHtml(p.unit)+'</small></div><div class="qty"><button type="button" data-dec="'+escapeHtml(p.id)+'" aria-label="کم کردن">−</button><b>'+money(q).replace(' تومان','')+'</b><button type="button" data-inc="'+escapeHtml(p.id)+'" aria-label="زیاد کردن">+</button></div></div>').join(''):'<div class="empty">سبد خرید خالی است.</div>';
  const subtotal=items.reduce((a,x)=>a+Math.round(Number(x.p.price_toman)*x.q),0);$('subtotal').textContent=money(subtotal);
  $('cartItems').querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec,q=(state.cart.get(id)||0)-1;if(q<=0)state.cart.delete(id);else state.cart.set(id,q);renderCart();});
- $('cartItems').querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc,p=state.products.find(x=>x.id===id),q=(state.cart.get(id)||0)+1;if(q>Number(p.stock)){note('موجودی کافی نیست.',true);return;}state.cart.set(id,q);renderCart();});
+ $('cartItems').querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc,p=state.products.find(x=>x.id===id),q=(state.cart.get(id)||0)+1;state.cart.set(id,q);renderCart();});
 }
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 $('cartOpen').onclick=()=>{openPanel('cartSection');renderCart();};
