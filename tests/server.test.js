@@ -38,6 +38,13 @@ test('health and public product endpoints start without secrets', async () => {
     const productsResponse = await fetch('http://127.0.0.1:' + port + '/api/products');
     assert.equal(productsResponse.status, 200);
     assert.deepEqual((await productsResponse.json()).products, []);
+    assert.equal(JSON.stringify(config).includes('CARD_NUMBER'), false, 'public config must never expose card details');
+    assert.equal(JSON.stringify(await productsResponse.json()).includes('CARD_NUMBER'), false, 'public products must never expose card details');
+    const unauthorizedOrder = await fetch('http://127.0.0.1:' + port + '/api/orders', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: '09123456789', city: 'اصفهان', address: 'نشانی آزمایشی معتبر', deliveryMethod: 'isfahan', items: [{ productId: 'walnut', quantity: 1 }] })
+    });
+    assert.equal(unauthorizedOrder.status, 401, 'orders must reject requests without signed Telegram initData');
   } finally {
     child.kill('SIGTERM');
     await Promise.race([once(child, 'exit'), new Promise(resolve => setTimeout(resolve, 1500))]);
