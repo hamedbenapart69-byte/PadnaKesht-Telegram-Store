@@ -186,8 +186,16 @@ app.patch('/api/admin/orders/:id', auth, admin, (req, res) => {
   if (!order) return res.status(404).json({ error: 'سفارش پیدا نشد.' });
   if (status === 'payment_confirmed' && !['awaiting_payment','payment_submitted'].includes(order.status)) return res.status(409).json({ error: 'این سفارش در وضعیت قابل تأیید پرداخت نیست.' });
   if (['preparing','shipped','completed'].includes(status) && !['payment_confirmed','preparing','shipped'].includes(order.status)) return res.status(409).json({ error: 'ابتدا پرداخت را دستی تأیید کنید.' });
-  db.prepare('UPDATE orders SET status=?,shipping_tracking=?,admin_note=?,updated_at=? WHERE id=?').run(status,String(shippingTracking).slice(0,120),String(adminNote).slice(0,500),now(),order.id);
-  audit(order.id,req.telegramUser.id,'status_changed',order.status+' -> '+status);
+  if (order.status === 'cancelled' && status !== 'cancelled') return res.status(409).json({ error: 'سفارش لغوشده قابل بازگردانی به جریان ارسال نیست؛ سفارش جدید ثبت کنید.' });
+  const changeStatus = db.transaction(() => {
+    if (status === 'cancelled' && order.status !== 'cancelled') {
+      const lines = JSON.parse(order.items_json);
+      for (const line of lines) db.prepare('UPDATE products SET stock=stock+?,updated_at=? WHERE id=?').run(line.quantity, now(), line.productId);
+    }
+    db.prepare('UPDATE orders SET status=?,shipping_tracking=?,admin_note=?,updated_at=? WHERE id=?').run(status,String(shippingTracking).slice(0,120),String(adminNote).slice(0,500),now(),order.id);
+    audit(order.id,req.telegramUser.id,'status_changed',order.status+' -> '+status);
+  });
+  changeStatus();
   res.json({ ok:true, id:order.id, status });
 });
 app.get('/api/admin/audit/:id', auth, admin, (req, res) => res.json({ events:db.prepare('SELECT actor_id,action,detail,created_at FROM audit_log WHERE order_id=? ORDER BY id').all(req.params.id) }));
