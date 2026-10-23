@@ -107,6 +107,7 @@ app.post('/api/orders', auth, (req, res) => {
   if (!['isfahan', 'post'].includes(deliveryMethod)) return res.status(400).json({ error: 'روش ارسال معتبر نیست.' });
   const feeRaw = deliveryMethod === 'isfahan' ? process.env.ISFAHAN_DELIVERY_FEE_TOMAN : process.env.POST_DELIVERY_FEE_TOMAN;
   if (feeRaw === undefined || feeRaw === '' || !Number.isSafeInteger(Number(feeRaw)) || Number(feeRaw) < 0) return res.status(503).json({ error: 'هزینه ارسال هنوز توسط مدیر تنظیم نشده است.' });
+  if (!process.env.CARD_HOLDER_NAME || !process.env.CARD_NUMBER) return res.status(503).json({ error: 'اطلاعات کارت هنوز توسط مدیر تنظیم نشده است؛ سفارش فعلاً ثبت نمی‌شود.' });
   if (!Array.isArray(items) || items.length < 1 || items.length > 40) return res.status(400).json({ error: 'سبد خرید معتبر نیست.' });
   const catalog = new Map(products().map(p => [p.id, p]));
   const normalized = [];
