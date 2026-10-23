@@ -126,9 +126,22 @@ app.post('/api/orders', auth, (req, res) => {
   if (!Number.isSafeInteger(total) || total <= 0) return res.status(400).json({ error: 'مبلغ نهایی معتبر نیست.' });
   const id = 'PK-' + crypto.randomBytes(5).toString('hex').toUpperCase();
   const timestamp = now();
-  db.prepare(`INSERT INTO orders(id,telegram_user_id,customer_name,phone,city,address,delivery_method,items_json,subtotal_toman,shipping_toman,total_toman,status,created_at,updated_at)
-    VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(id, req.telegramUser.id, req.telegramUser.name, phone.trim(), city.trim(), address.trim(), deliveryMethod, JSON.stringify(normalized), subtotal, shipping, total, 'awaiting_payment', timestamp, timestamp);
-  audit(id, req.telegramUser.id, 'order_created', 'سفارش ثبت شد؛ در انتظار تأیید پرداخت');
+  try {
+    const createOrder = db.transaction(() => {
+      // Re-check and reserve stock inside the same transaction to avoid overselling.
+      for (const line of normalized) {
+        const result = db.prepare('UPDATE products SET stock=stock-?,updated_at=? WHERE id=? AND active=1 AND stock>=?').run(line.quantity, timestamp, line.productId, line.quantity);
+        if (result.changes !== 1) throw new Error('STOCK_CHANGED');
+      }
+      db.prepare(`INSERT INTO orders(id,telegram_user_id,customer_name,phone,city,address,delivery_method,items_json,subtotal_toman,shipping_toman,total_toman,status,created_at,updated_at)
+        VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)`).run(id, req.telegramUser.id, req.telegramUser.name, phone.trim(), city.trim(), address.trim(), deliveryMethod, JSON.stringify(normalized), subtotal, shipping, total, 'awaiting_payment', timestamp, timestamp);
+      audit(id, req.telegramUser.id, 'order_created', 'سفارش ثبت شد؛ در انتظار تأیید پرداخت و موجودی رزرو شد');
+    });
+    createOrder();
+  } catch (e) {
+    if (e.message === 'STOCK_CHANGED') return res.status(409).json({ error: 'موجودی کالا تغییر کرده است؛ سبد خرید را به‌روزرسانی کنید.' });
+    throw e;
+  }
   // Card details are returned only from the order-creation/checkout response.
   res.status(201).json({
     order: { id, items: normalized, subtotalToman: subtotal, shippingToman: shipping, totalToman: total, status: 'awaiting_payment' },
