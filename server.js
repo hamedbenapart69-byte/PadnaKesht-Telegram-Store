@@ -92,10 +92,7 @@ function audit(orderId, actorId, action, detail='') {
 app.get('/api/health', (_req, res) => res.json({ ok: true, service: 'padnakasht-telegram-store', database: 'connected', telegramAuthConfigured: Boolean(process.env.BOT_TOKEN), adminConfigured: adminIds.size > 0 }));
 app.get('/api/config', (_req, res) => res.json({
   brand: 'پادناکِشت', slogan: 'از دل طبیعت دنا',
-  delivery: {
-    isfahan: process.env.ISFAHAN_DELIVERY_FEE_TOMAN !== undefined && process.env.ISFAHAN_DELIVERY_FEE_TOMAN !== '',
-    post: process.env.POST_DELIVERY_FEE_TOMAN !== undefined && process.env.POST_DELIVERY_FEE_TOMAN !== ''
-  }
+  delivery: { isfahan: true, post: true, feeToman: 0, label: 'ارسال رایگان' }
 }));
 app.get('/api/products', (_req, res) => res.json({ products: products() }));
 
@@ -105,8 +102,8 @@ app.post('/api/orders', auth, (req, res) => {
   if (typeof city !== 'string' || city.trim().length < 2 || city.length > 80) return res.status(400).json({ error: 'شهر را وارد کنید.' });
   if (typeof address !== 'string' || address.trim().length < 5 || address.length > 500) return res.status(400).json({ error: 'نشانی کامل وارد کنید.' });
   if (!['isfahan', 'post'].includes(deliveryMethod)) return res.status(400).json({ error: 'روش ارسال معتبر نیست.' });
-  const feeRaw = deliveryMethod === 'isfahan' ? process.env.ISFAHAN_DELIVERY_FEE_TOMAN : process.env.POST_DELIVERY_FEE_TOMAN;
-  if (feeRaw === undefined || feeRaw === '' || !Number.isSafeInteger(Number(feeRaw)) || Number(feeRaw) < 0) return res.status(503).json({ error: 'هزینه ارسال هنوز توسط مدیر تنظیم نشده است.' });
+  // Owner-confirmed policy: delivery is free for both Isfahan and other cities.
+  const shipping = 0;
   if (!process.env.CARD_HOLDER_NAME || !process.env.CARD_NUMBER) return res.status(503).json({ error: 'اطلاعات کارت هنوز توسط مدیر تنظیم نشده است؛ سفارش فعلاً ثبت نمی‌شود.' });
   if (!Array.isArray(items) || items.length < 1 || items.length > 40) return res.status(400).json({ error: 'سبد خرید معتبر نیست.' });
   const catalog = new Map(products().map(p => [p.id, p]));
@@ -122,7 +119,6 @@ app.post('/api/orders', auth, (req, res) => {
     subtotal += line;
     normalized.push({ productId: p.id, name: p.name, unit: p.unit, quantity: qty, unitPriceToman: price, lineTotalToman: line });
   }
-  const shipping = Number(feeRaw);
   const total = subtotal + shipping;
   if (!Number.isSafeInteger(total) || total <= 0) return res.status(400).json({ error: 'مبلغ نهایی معتبر نیست.' });
   const id = 'PK-' + crypto.randomBytes(5).toString('hex').toUpperCase();
