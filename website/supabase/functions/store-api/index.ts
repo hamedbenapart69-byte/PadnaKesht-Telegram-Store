@@ -294,10 +294,7 @@ const STATIC_HEADERS={
 };
 async function serveStatic(req:Request){
   const url=new URL(req.url);
-  const prefix="/functions/v1/store-api";
-  const remainder=decodeURIComponent(url.pathname.slice(prefix.length));
-  let name=remainder.startsWith("/")?remainder.slice(1):remainder;
-  name=name||"index.html";
+  const name=url.searchParams.get("asset")||"index.html";
   if(name.includes("/")||!Object.hasOwn(STATIC_TYPES,name))return new Response("Not found",{status:404,headers:STATIC_HEADERS});
   const content=STATIC_ASSETS[name];
   if(content===undefined)return new Response("Not found",{status:404,headers:STATIC_HEADERS});
