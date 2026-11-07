@@ -6,7 +6,7 @@ const files={
   worker:read("website/src/index.js"),wrangler:read("website/wrangler.toml"),
   html:read("website/public/index.html"),adminHtml:read("website/public/admin.html"),
   app:read("website/public/app.js"),admin:read("website/public/admin.js"),
-  css:read("website/public/styles.css"),edge:read("website/supabase/functions/store-api/index.ts"),
+  css:read("website/public/styles.css"),adminCss:read("website/public/admin.css"),edge:read("website/supabase/functions/store-api/index.ts"),
   migration:read("website/supabase/migrations/20261107154357_storefront_orders_admin_and_inventory.sql"),
   credits:read("website/public/credits.html"),robots:read("website/public/robots.txt"),
   config:read("website/supabase/config.toml")
@@ -48,7 +48,7 @@ const roles={
     need(files.html.includes('<label')&&files.adminHtml.includes('<label'),"Form labels missing");
   },
   responsive:()=>{
-    need(files.css.includes("@media(max-width:760px)")&&files.css.includes("@media(max-width:680px)"),"Mobile layout breakpoints missing");
+    need(files.css.includes("@media(max-width:760px)")&&files.adminCss.includes("@media(max-width:680px)"),"Mobile layout breakpoints missing");
     need(files.css.includes("prefers-reduced-motion"),"Reduced-motion support missing");
     need(files.css.includes("grid-template-columns:repeat(2"),"Mobile product grid missing");
   },
