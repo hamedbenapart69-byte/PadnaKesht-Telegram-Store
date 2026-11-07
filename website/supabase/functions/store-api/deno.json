@@ -1,1 +1,10 @@
-{"compilerOptions":{"strict":true,"lib":["deno.ns","dom"]}}
+{
+  "nodeModulesDir": "auto",
+  "compilerOptions": {
+    "strict": true,
+    "lib": [
+      "deno.ns",
+      "dom"
+    ]
+  }
+}
