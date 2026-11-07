@@ -34,7 +34,8 @@ jobs:
       - name: Check storefront contracts
         run: node website/scripts/check.mjs
       - name: Type-check Supabase Edge Function
-        run: deno check website/supabase/functions/store-api/index.ts
+        working-directory: website/supabase/functions/store-api
+        run: deno check --node-modules-dir=auto index.ts
       - name: Validate Wrangler build
         working-directory: website
         run: npx --yes wrangler@4 deploy --dry-run --outdir /tmp/padnakasht-worker
