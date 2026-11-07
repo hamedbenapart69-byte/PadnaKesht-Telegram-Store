@@ -8,7 +8,7 @@
   <script src="/admin.js" defer></script>
 </head>
 <body class="admin-body">
-  <header class="admin-header"><a class="brand" href="/"><span class="brand-mark">پ</span><span class="brand-copy"><strong>پادناکِشت</strong><small>پنل مدیریت فروشگاه</small></span></a><a href="/" class="back-link">مشاهده فروشگاه ↗</a></header>
+  <header class="admin-header"><a class="brand" href="/"><span class="brand-mark">پ</span><span class="brand-copy"><strong>پادناکِشت</strong><small>پنل مدیریت فروشگاه</small></span></a><a href="/" class="back-link" aria-label="بازگشت به فروشگاه اصلی">مشاهده فروشگاه ↗</a></header>
   <main class="admin-wrap">
     <section class="login-card" id="setup-card" hidden>
       <span class="eyebrow">راه‌اندازی نخستین مدیر</span><h1>ساخت گذرواژه مدیر</h1><p>کد یک‌بارمصرف راه‌اندازی را وارد کنید و گذرواژه اختصاصی خودتان را بسازید.</p>
@@ -25,7 +25,7 @@
       <form id="login-form"><label>گذرواژه<input name="password" type="password" required autocomplete="current-password"></label><p class="form-feedback" id="login-feedback" role="status"></p><button class="button button-dark full-width" type="submit">ورود به پنل</button></form>
     </section>
     <section id="admin-dashboard" hidden>
-      <div class="admin-title"><div><span class="eyebrow">مدیریت فروشگاه</span><h1>داشبورد پادناکِشت</h1></div><button class="button button-outline" id="logout-button" type="button">خروج امن</button></div>
+      <div class="admin-title"><div><span class="eyebrow">مدیریت فروشگاه</span><h1>داشبورد پادناکِشت</h1></div><button class="button button-outline" id="logout-button" type="button" aria-label="خروج امن از پنل مدیریت">خروج امن</button></div>
       <div class="admin-tabs"><button class="active" data-tab="orders" type="button">سفارش‌ها</button><button data-tab="products" type="button">محصولات</button></div>
       <section class="admin-panel" id="orders-panel"><div class="panel-title"><h2>درخواست‌های خرید</h2><button class="text-button" id="orders-refresh" type="button">به‌روزرسانی</button></div><div id="orders-list"><p class="loading-state">در حال دریافت سفارش‌ها…</p></div></section>
       <section class="admin-panel" id="products-panel" hidden><div class="panel-title"><h2>فهرست محصولات</h2><button class="text-button" id="products-refresh" type="button">به‌روزرسانی</button></div><div id="products-list"></div></section>
