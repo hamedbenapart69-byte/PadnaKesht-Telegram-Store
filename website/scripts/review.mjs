@@ -15,17 +15,16 @@ const files={
 };
 const roles={
   architecture:()=>{
-    need(files.worker.includes("/functions/v1/store-api"),"Worker must proxy the Supabase Edge Function");
-    need(files.wrangler.includes('binding = "ASSETS"')&&files.wrangler.includes('run_worker_first = ["/api/*"]'),"Static assets/API routing missing");
-    need(files.wrangler.includes("SUPABASE_URL")&&!/d1_databases|database_id/i.test(files.wrangler),"Unexpected D1 dependency");
-    need(files.worker.includes("scheduled")&&files.worker.includes("keepDatabaseAwake"),"Free-tier database keepalive trigger missing");
+    need(files.edge.includes("STATIC_ASSETS")&&files.edge.includes("serveStatic"),"Supabase Edge Function must serve the storefront assets");
+    need(files.edge.includes("/api/products")&&files.edge.includes("/api/orders"),"Store API routes missing");
+    need(files.edge.includes("new URL")&&files.edge.includes("STATIC_TYPES"),"Static asset routing missing");
   },
   security:()=>{
     need(files.edge.includes("SUPABASE_SERVICE_ROLE_KEY"),"Server-side service role not used");
     need(files.edge.includes("PBKDF2")&&files.edge.includes("310000"),"Password hashing parameters missing");
     need(files.edge.includes("HMAC")&&files.edge.includes("signSession")&&files.edge.includes("isAdmin"),"Signed admin session verification missing");
     need(files.edge.includes("consume_store_rate_limit")&&files.migration.includes("ENABLE ROW LEVEL SECURITY"),"Rate limit or RLS controls missing");
-    need(files.worker.includes("STORE_PROXY_SECRET")&&files.edge.includes("x-store-proxy-secret")&&files.proxyMigration.includes("proxy_secret_hash"),"Private Worker proxy authentication missing");
+    need(files.edge.includes("PUBLIC_API_KEY")&&files.edge.includes('req.headers.get("apikey")')&&files.edge.includes("isAdmin"),"Public API key validation or admin session protection missing");
     need(!files.wrangler.includes("service_role")&&!/ADMIN_PASSWORD\s*=/.test(files.worker+files.wrangler),"Private credential found in deploy config");
     need(!/on(click|load|error)=/i.test(files.html+files.adminHtml),"Inline HTML event handler found");
   },
@@ -64,15 +63,15 @@ const roles={
   },
   performance:()=>{
     need(files.app.includes('loading="lazy"'),"Lazy loading for catalogue images missing");
-    need(files.worker.includes('"cache-control":"no-store"'),"Sensitive API responses must not be cached");
+    need(files.edge.includes('"cache-control":"no-store"'),"Sensitive API responses must not be cached");
     need(!files.html.includes("fonts.googleapis.com")&&!files.html.includes("<script src=\"https://"),"Unneeded external frontend dependency found");
     need(files.worker.includes("X-Content-Type-Options")&&files.worker.includes("Referrer-Policy"),"Baseline security headers missing");
   },
   deployment:()=>{
-    need(files.wrangler.includes('name = "padnakasht-store"')&&files.wrangler.includes('main = "src/index.js"'),"Worker deployment identity missing");
-    need(files.wrangler.includes('crons = ["0 */8 * * *"]'),"Database keepalive schedule missing");
-    need(files.wrangler.includes("sb_publishable_"),"Public Supabase publishable key missing");
-    need(files.config.includes("verify_jwt = false")&&files.edge.includes("isAdmin"),"Edge Function custom-auth pairing missing");
+    need(files.edge.includes("STATIC_ASSETS")&&files.edge.includes("STATIC_TYPES"),"Embedded static storefront assets missing");
+    need(files.config.includes("verify_jwt = false")&&files.edge.includes("PUBLIC_API_KEY"),"Edge Function public-key gate is not configured");
+    need(files.edge.includes("SUPABASE_SERVICE_ROLE_KEY")&&files.edge.includes("serveStatic"),"Supabase Edge deployment contract missing");
+  }
   }
 };
 function need(ok,message){if(!ok)throw new Error(message);}
