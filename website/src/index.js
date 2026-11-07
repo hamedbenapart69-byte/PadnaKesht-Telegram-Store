@@ -22,7 +22,7 @@ function securityHeaders(headers={}){
 async function apiProxy(request,env){
   const url=new URL(request.url),path=url.pathname,method=request.method;
   if(["POST","PUT","PATCH","DELETE"].includes(method)&&!sameOrigin(request))return json({error:"درخواست نامعتبر است."},403);
-  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY)return json({error:"اتصال پایگاه داده هنوز پیکربندی نشده است."},503);
+  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY||!env.STORE_PROXY_SECRET)return json({error:"تنظیمات امن اتصال پایگاه داده کامل نشده است."},503);
   let body={};
   if(!["GET","HEAD"].includes(method)){
     try{body=await request.json();}catch{return json({error:"اطلاعات ارسالی معتبر نیست."},400);}
@@ -32,6 +32,7 @@ async function apiProxy(request,env){
     "content-type":"application/json",
     "apikey":env.SUPABASE_ANON_KEY,
     "x-admin-session":adminToken,
+    "x-store-proxy-secret":env.STORE_PROXY_SECRET,
     "x-client-ip":request.headers.get("CF-Connecting-IP")||"unknown"
   };
   let upstream;
@@ -55,11 +56,11 @@ async function apiProxy(request,env){
   return json(data,upstream.status,responseHeaders);
 }
 async function keepDatabaseAwake(env){
-  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY)return;
+  if(!env.SUPABASE_URL||!env.SUPABASE_ANON_KEY||!env.STORE_PROXY_SECRET)return;
   try{
     await fetch(env.SUPABASE_URL.replace(/\/$/,"")+"/functions/v1/store-api",{
       method:"POST",
-      headers:{"content-type":"application/json","apikey":env.SUPABASE_ANON_KEY},
+      headers:{"content-type":"application/json","apikey":env.SUPABASE_ANON_KEY,"x-store-proxy-secret":env.STORE_PROXY_SECRET},
       body:JSON.stringify({path:"/api/health",method:"GET",body:{}}),
       cache:"no-store"
     });
