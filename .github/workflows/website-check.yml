@@ -45,7 +45,7 @@ jobs:
         run: npx --yes wrangler@4 deploy --dry-run --outdir /tmp/padnakasht-worker
 
   independent-reviewers:
-    name: Reviewer / \${{ matrix.reviewer }}
+    name: Reviewer / ${{ matrix.reviewer }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -69,7 +69,7 @@ jobs:
         with:
           node-version: 22
       - name: Run independent review
-        run: node website/scripts/review.mjs \${{ matrix.reviewer }}
+        run: node website/scripts/review.mjs ${{ matrix.reviewer }}
 
   publish-verified-release:
     name: Publish branch only after all gates pass
