@@ -9,6 +9,7 @@ const files={
   css:read("website/public/styles.css"),adminCss:read("website/public/admin.css"),edge:read("website/supabase/functions/store-api/index.ts"),
   migration:read("website/supabase/migrations/20261107154357_storefront_orders_admin_and_inventory.sql"),
   proxyMigration:read("website/supabase/migrations/20261107155324_store_api_proxy_secret_guard.sql"),
+  cleanupMigration:read("website/supabase/migrations/20261107160000_drop_duplicate_store_order_indexes.sql"),
   credits:read("website/public/credits.html"),robots:read("website/public/robots.txt"),
   config:read("website/supabase/config.toml")
 };
@@ -31,6 +32,7 @@ const roles={
   database:()=>{
     for(const token of ["price_confirmed","stock_confirmed","amount_confirmed","numeric(12,2)","store_admin_credentials","store_rate_limits"])need(files.migration.includes(token),"Missing database control: "+token);
     need(files.migration.includes("REVOKE ALL ON FUNCTION")&&files.migration.includes("GRANT EXECUTE"),"RPC permissions are not restricted");
+    need(files.cleanupMigration.includes("DROP INDEX")&&!files.migration.includes("CREATE INDEX IF NOT EXISTS idx_store_orders_created_at"),"Duplicate order indexes are not cleaned up");
   },
   orders:()=>{
     for(const token of ["/api/orders","/api/order-lookup","/api/admin/orders","confirm_store_order","transition_store_order"])need(files.edge.includes(token),"Order API contract missing: "+token);
