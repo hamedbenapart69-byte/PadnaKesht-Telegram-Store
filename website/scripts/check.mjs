@@ -18,6 +18,7 @@ const required = [
   "website/supabase/functions/store-api/deno.json",
   "website/supabase/migrations/20261107154357_storefront_orders_admin_and_inventory.sql",
   "website/supabase/migrations/20261107155324_store_api_proxy_secret_guard.sql",
+  "website/supabase/migrations/20261107160000_drop_duplicate_store_order_indexes.sql",
   "website/supabase/functions/store-api/import_map.json"
 ];
 for (const file of required) {
@@ -34,6 +35,7 @@ const css=read("website/public/styles.css");
 const edge=read("website/supabase/functions/store-api/index.ts");
 const migration=read("website/supabase/migrations/20261107154357_storefront_orders_admin_and_inventory.sql");
 const proxyMigration=read("website/supabase/migrations/20261107155324_store_api_proxy_secret_guard.sql");
+const cleanupMigration=read("website/supabase/migrations/20261107160000_drop_duplicate_store_order_indexes.sql");
 const credits=read("website/public/credits.html");
 const robots=read("website/public/robots.txt");
 
@@ -45,7 +47,7 @@ if(!wrangler.includes('name = "padnakasht-store"'))throw new Error("Worker name 
 if(!wrangler.includes('crons = ["0 */8 * * *"]'))throw new Error("Supabase keepalive cron missing");
 if(!wrangler.includes("sb_publishable_"))throw new Error("Public Supabase publishable key missing");
 if(wrangler.includes("service_role")||wrangler.includes("D1")||wrangler.includes("d1_databases"))throw new Error("Private key or unused D1 configuration found");
-if(!edge.includes("SUPABASE_SERVICE_ROLE_KEY")||!edge.includes("isAdmin")||!edge.includes("x-store-proxy-secret")||!proxyMigration.includes("proxy_secret_hash"))throw new Error("Edge Function service-role access missing");
+if(!edge.includes("SUPABASE_SERVICE_ROLE_KEY")||!edge.includes("isAdmin")||!edge.includes("x-store-proxy-secret")||!proxyMigration.includes("proxy_secret_hash")||!cleanupMigration.includes("DROP INDEX"))throw new Error("Edge Function service-role access missing");
 if(!read("website/supabase/config.toml").includes("verify_jwt = false"))throw new Error("Edge Function custom-auth config missing");
 if(!html.includes("/app.js")||!html.includes("/styles.css")||!html.includes("تصویر نمایشی"))throw new Error("Storefront scripts/styles/photo disclosure missing");
 if(!adminHtml.includes('id="setup-form"')||!adminHtml.includes('name="setupToken"')||!adminHtml.includes('name="passwordConfirm"'))throw new Error("One-time admin setup flow missing");
