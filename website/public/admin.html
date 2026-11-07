@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#263b2d">
+  <title>مدیریت فروشگاه | پادناکِشت</title>
+  <link rel="stylesheet" href="/styles.css"><link rel="stylesheet" href="/admin.css">
+  <script src="/admin.js" defer></script>
+</head>
+<body class="admin-body">
+  <header class="admin-header"><a class="brand" href="/"><span class="brand-mark">پ</span><span class="brand-copy"><strong>پادناکِشت</strong><small>پنل مدیریت فروشگاه</small></span></a><a href="/" class="back-link">مشاهده فروشگاه ↗</a></header>
+  <main class="admin-wrap">
+    <section class="login-card" id="login-card">
+      <span class="eyebrow">دسترسی محدود</span><h1>ورود مدیر</h1><p>برای مدیریت محصولات و سفارش‌ها، گذرواژه مدیر را وارد کنید.</p>
+      <form id="login-form"><label>گذرواژه<input name="password" type="password" required autocomplete="current-password"></label><p class="form-feedback" id="login-feedback" role="status"></p><button class="button button-dark full-width" type="submit">ورود به پنل</button></form>
+    </section>
+    <section id="admin-dashboard" hidden>
+      <div class="admin-title"><div><span class="eyebrow">مدیریت فروشگاه</span><h1>داشبورد پادناکِشت</h1></div><button class="button button-outline" id="logout-button" type="button">خروج امن</button></div>
+      <div class="admin-tabs"><button class="active" data-tab="orders" type="button">سفارش‌ها</button><button data-tab="products" type="button">محصولات</button></div>
+      <section class="admin-panel" id="orders-panel"><div class="panel-title"><h2>درخواست‌های خرید</h2><button class="text-button" id="orders-refresh" type="button">به‌روزرسانی</button></div><div id="orders-list"><p class="loading-state">در حال دریافت سفارش‌ها…</p></div></section>
+      <section class="admin-panel" id="products-panel" hidden><div class="panel-title"><h2>فهرست محصولات</h2><button class="text-button" id="products-refresh" type="button">به‌روزرسانی</button></div><div id="products-list"></div></section>
+      <p class="admin-footnote">قیمت‌ها و موجودی‌ها باید از اطلاعات واقعی روز وارد شوند. تأیید سفارش، موجودی کالاها را در پایگاه داده رزرو می‌کند.</p>
+    </section>
+  </main>
+</body>
+</html>
