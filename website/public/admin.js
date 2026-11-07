@@ -4,8 +4,14 @@
   const digits=n=>new Intl.NumberFormat("fa-IR").format(Number(n||0));
   const money=n=>n===null||n===undefined?"تأیید نشده":digits(n)+" تومان";
   const statusText=s=>({new:"در انتظار بررسی",reviewed:"در حال هماهنگی",confirmed:"تأیید شده",preparing:"در حال آماده‌سازی",shipped:"ارسال شده",completed:"تکمیل شده",cancelled:"لغو شده"})[s]||s;
+  const API_ENDPOINT=new URL("./",window.location.href).toString();
+  const PUBLIC_API_KEY="sb_publishable_Ttbile4UN76kwsZ0chw3DA_HfaqPUjA";
   const api=async(path,options={})=>{
-    const response=await fetch(path,{...options,credentials:"same-origin",headers:{"content-type":"application/json",...(options.headers||{})}});
+    let body={};if(options.body){try{body=JSON.parse(options.body);}catch{body={};}}
+    const token=sessionStorage.getItem("padna-admin-session")||"";
+    const headers={"content-type":"application/json","apikey":PUBLIC_API_KEY};
+    if(token)headers["x-admin-session"]=token;
+    const response=await fetch(API_ENDPOINT,{method:"POST",headers,body:JSON.stringify({path,method:options.method||"GET",body})});
     let data={};try{data=await response.json();}catch{}
     if(!response.ok)throw new Error(data.error||"درخواست انجام نشد.");
     return data;
@@ -46,12 +52,13 @@
   $("login-form").addEventListener("submit",async event=>{
     event.preventDefault();const form=event.currentTarget,button=form.querySelector("button"),password=new FormData(form).get("password");
     button.disabled=true;feedback("login-feedback","در حال بررسی…");
-    try{await api("/api/admin/login",{method:"POST",body:JSON.stringify({password})});form.reset();showDashboard();}
+    try{const data=await api("/api/admin/login",{method:"POST",body:JSON.stringify({password})});if(data.token)sessionStorage.setItem("padna-admin-session",data.token);form.reset();showDashboard();}
     catch(error){feedback("login-feedback",error.message);}
     finally{button.disabled=false;}
   });
   $("logout-button").addEventListener("click",async()=>{
     try{await api("/api/admin/logout",{method:"POST",body:"{}"});}catch{}
+    sessionStorage.removeItem("padna-admin-session");
     showLogin();
   });
   document.querySelectorAll(".admin-tabs button").forEach(button=>button.addEventListener("click",()=>{
