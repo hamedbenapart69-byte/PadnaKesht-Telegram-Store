@@ -18,10 +18,14 @@
     preparing:"در حال آماده‌سازی",shipped:"ارسال شده",completed:"تکمیل شده",cancelled:"لغو شده"
   })[status] || "در حال بررسی";
 
+  const API_ENDPOINT = new URL("./",window.location.href).toString();
+  const PUBLIC_API_KEY = "sb_publishable_Ttbile4UN76kwsZ0chw3DA_HfaqPUjA";
   async function api(path,options={}) {
-    const response = await fetch(path,{...options,credentials:"same-origin",headers:{"content-type":"application/json",...(options.headers||{})}});
-    let data={}; try { data=await response.json(); } catch {}
-    if (!response.ok) throw new Error(data.error || "درخواست انجام نشد.");
+    let body={};
+    if(options.body){try{body=JSON.parse(options.body);}catch{body={};}}
+    const response=await fetch(API_ENDPOINT,{method:"POST",headers:{"content-type":"application/json","apikey":PUBLIC_API_KEY},body:JSON.stringify({path,method:options.method||"GET",body})});
+    let data={};try{data=await response.json();}catch{}
+    if(!response.ok)throw new Error(data.error||"درخواست انجام نشد.");
     return data;
   }
   function feedback(id,message,success=false) {
