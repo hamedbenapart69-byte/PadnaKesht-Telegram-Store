@@ -22,6 +22,9 @@ const json = (data, status = 200, extra = {}) => new Response(JSON.stringify(dat
 });
 const clean = (value, max = 500) => String(value ?? "").trim().slice(0, max);
 const isInt = (value, min = 0) => Number.isSafeInteger(value) && value >= min;
+function normalizeDigits(value) {
+  return String(value ?? "").replace(/[۰-۹]/g, d => String("۰۱۲۳۴۵۶۷۸۹".indexOf(d))).replace(/[٠-٩]/g, d => String("٠١٢٣٤٥٦٧٨٩".indexOf(d)));
+}
 
 function parseCookie(header, name) {
   const part = (header || "").split(";").map(x => x.trim()).find(x => x.startsWith(name + "="));
@@ -136,11 +139,12 @@ async function handleApi(request, env) {
     if (!await rateLimit(env.DB,"order:"+await hashText(ip),8,3600000)) return json({error:"تعداد درخواست‌ها زیاد است؛ کمی بعد دوباره تلاش کنید."},429);
     let body;
     try { body = await request.json(); } catch { return json({error:"اطلاعات ارسالی معتبر نیست."},400); }
-    const customerName = clean(body.customerName,100), phone = clean(body.phone,24);
+    const customerName = clean(body.customerName,100), phone = normalizeDigits(clean(body.phone,24));
     const city = clean(body.city,80), address = clean(body.address,500), notes = clean(body.notes,500);
+    const phoneNormalized = normalizeDigits(clean(body.phone,24));
     const deliveryMethod = body.deliveryMethod === "isfahan" ? "isfahan" : body.deliveryMethod === "post" ? "post" : "";
     if (customerName.length < 2) return json({error:"نام و نام خانوادگی را وارد کنید."},400);
-    if (!/^[+0-9۰-۹\\s()\\-]{8,24}$/.test(phone)) return json({error:"شماره تماس معتبر وارد کنید."},400);
+    if (!/^[+0-9\\s()\\-]{8,24}$/.test(phone)) return json({error:"شماره تماس معتبر وارد کنید."},400);
     if (city.length < 2 || address.length < 5 || !deliveryMethod) return json({error:"شهر، نشانی کامل و روش تحویل را بررسی کنید."},400);
     if (!Array.isArray(body.items) || body.items.length < 1 || body.items.length > 20) return json({error:"سبد خرید معتبر نیست."},400);
 
@@ -148,6 +152,7 @@ async function handleApi(request, env) {
     for (const item of body.items) {
       const id = clean(item?.productId,60), qty = Number(item?.quantity);
       if (!id || !Number.isFinite(qty) || qty <= 0 || qty > 100 || Math.round(qty*100) !== qty*100) return json({error:"تعداد یکی از کالاها معتبر نیست."},400);
+      if (id === "loar-cheese" && qty < 0.5) return json({error:"حداقل سفارش پنیر لوار نیم‌کیلوگرم است."},400);
       quantities.set(id,(quantities.get(id)||0)+qty);
     }
     if (quantities.size > 20) return json({error:"تعداد کالاهای انتخابی بیش از حد مجاز است."},400);
@@ -175,7 +180,7 @@ async function handleApi(request, env) {
   if (method === "POST" && path === "/api/order-lookup") {
     let body;
     try { body = await request.json(); } catch { return json({error:"اطلاعات معتبر نیست."},400); }
-    const code = clean(body.code,30).toUpperCase(), phone = clean(body.phone,24);
+    const code = clean(body.code,30).toUpperCase(), phone = normalizeDigits(clean(body.phone,24));
     if (!code || !phone) return json({error:"کد سفارش و شماره تماس را وارد کنید."},400);
     const order = await env.DB.prepare("SELECT id,phone,status,subtotal_toman,shipping_toman,total_toman,created_at,updated_at FROM orders WHERE id=?").bind(code).first();
     if (!order || order.phone !== phone) return json({error:"سفارشی با این کد و شماره تماس پیدا نشد."},404);
@@ -241,6 +246,7 @@ async function handleApi(request, env) {
 
       if (status==="confirmed") {
         if (!["new","reviewed"].includes(order.status)) return json({error:"این سفارش در وضعیت قابل تأیید نیست."},409);
+        if (body.shippingToman === null || body.shippingToman === undefined || body.shippingToman === "") return json({error:"هزینه ارسال را مشخص کنید؛ برای ارسال رایگان عدد صفر وارد کنید."},400);
         const shipping = Number(body.shippingToman);
         if (!isInt(shipping,0)) return json({error:"هزینه ارسال را به تومان و به‌صورت عدد صحیح وارد کنید."},400);
         const items = JSON.parse(order.items_json), ids = items.map(x=>x.productId), placeholders = ids.map(()=>"?").join(",");
