@@ -1,17 +1,17 @@
 const INITIAL_PRODUCTS = [
-  ["kashk","کشک","کشک محلی؛ قیمت و موجودی پس از تأیید ثبت می‌شود.","لبنیات","کیلوگرم","/images/kashk.jpg",10],
-  ["walnut-kernel","مغز گردو","مغز گردوی تولیدکنندگان پادنا.","خشکبار","کیلوگرم","/images/walnuts.jpg",20],
-  ["grape-molasses","شیره انگور","شیره انگور؛ بدون افزودنی طبق توضیح محصول.","شیره‌ها","کیلوگرم","/images/grape-molasses.jpg",30],
-  ["apple-molasses","شیره سیب","شیره سیب تهیه‌شده در پادنا.","شیره‌ها","کیلوگرم","/images/apple-molasses.jpg",40],
-  ["vinegar","سرکه","سرکه محلی؛ حجم بطری هنگام تأیید سفارش مشخص می‌شود.","چاشنی‌ها","بطری ۱٫۵ لیتری","/images/vinegar.jpg",50],
-  ["honey","عسل","عسل عرضه‌شده از تولیدکنندگان منطقه.","عسل و فرآورده‌ها","کیلوگرم","/images/honey.jpg",60],
-  ["beans","لوبیا","لوبیای تولید منطقه پادنا.","حبوبات","کیلوگرم","/images/beans.jpg",70],
-  ["loar-cheese","پنیر لوار","پنیر لوار محلی؛ حداقل سفارش نیم‌کیلوگرم.","لبنیات","کیلوگرم","/images/loar-cheese.jpg",80],
-  ["tahini","ارده","ارده کنجد.","چاشنی‌ها","کیلوگرم","/images/tahini.jpg",90],
-  ["abghooreh","آبغوره","آبغوره تهیه‌شده از غوره سبز.","چاشنی‌ها","بطری","/images/abghureh.jpg",100],
-  ["date-molasses","شیره خرما","شیره خرما.","شیره‌ها","کیلوگرم","/images/date-molasses.jpg",110],
-  ["fig","انجیر","انجیر خشک منطقه.","خشکبار","کیلوگرم","/images/figs.jpg",120],
-  ["mulberry","توت خشک","توت خشک محلی.","خشکبار","کیلوگرم","/images/mulberries.jpg",130]
+  ["kashk","کشک","کشک محلی؛ قیمت و موجودی پس از تأیید ثبت می‌شود.","لبنیات","کیلوگرم","https://images.pexels.com/photos/10809146/pexels-photo-10809146.jpeg?cs=srgb&dl=pexels-eliftekkaya-10809146.jpg&fm=jpg",10],
+  ["walnut-kernel","مغز گردو","مغز گردوی تولیدکنندگان پادنا.","خشکبار","کیلوگرم","https://images.pexels.com/photos/36418624/pexels-photo-36418624.jpeg?cs=srgb&dl=pexels-edita-brus-2027796741-36418624.jpg&fm=jpg",20],
+  ["grape-molasses","شیره انگور","شیره انگور؛ بدون افزودنی طبق توضیح محصول.","شیره‌ها","کیلوگرم","https://images.pexels.com/photos/21193087/pexels-photo-21193087.jpeg?cs=srgb&dl=pexels-andres-alaniz-461433202-21193087.jpg&fm=jpg",30],
+  ["apple-molasses","شیره سیب","شیره سیب تهیه‌شده در پادنا.","شیره‌ها","کیلوگرم","https://images.pexels.com/photos/14833258/pexels-photo-14833258.jpeg?cs=srgb&dl=pexels-nogman-14833258.jpg&fm=jpg",40],
+  ["vinegar","سرکه","سرکه محلی؛ حجم بطری هنگام تأیید سفارش مشخص می‌شود.","چاشنی‌ها","بطری ۱٫۵ لیتری","https://images.pexels.com/photos/7493940/pexels-photo-7493940.jpeg?cs=srgb&dl=pexels-roman-odintsov-7493940.jpg&fm=jpg",50],
+  ["honey","عسل","عسل عرضه‌شده از تولیدکنندگان منطقه.","عسل و فرآورده‌ها","کیلوگرم","https://images.pexels.com/photos/5634203/pexels-photo-5634203.jpeg?cs=srgb&dl=pexels-adonyi-foto-5634203.jpg&fm=jpg",60],
+  ["beans","لوبیا","لوبیای تولید منطقه پادنا.","حبوبات","کیلوگرم","https://images.pexels.com/photos/5228850/pexels-photo-5228850.jpeg?cs=srgb&dl=pexels-leeloothefirst-5228850.jpg&fm=jpg",70],
+  ["loar-cheese","پنیر لوار","پنیر لوار محلی؛ حداقل سفارش نیم‌کیلوگرم.","لبنیات","کیلوگرم","https://images.pexels.com/photos/19460144/pexels-photo-19460144.jpeg?cs=srgb&dl=pexels-jaralol-19460144.jpg&fm=jpg",80],
+  ["tahini","ارده","ارده کنجد.","چاشنی‌ها","کیلوگرم","https://images.pexels.com/photos/8951047/pexels-photo-8951047.jpeg?cs=srgb&dl=pexels-ivan-s-8951047.jpg&fm=jpg",90],
+  ["abghooreh","آبغوره","آبغوره تهیه‌شده از غوره سبز.","چاشنی‌ها","بطری","https://images.pexels.com/photos/7656754/pexels-photo-7656754.jpeg?cs=srgb&dl=pexels-cup-of-couple-7656754.jpg&fm=jpg",100],
+  ["date-molasses","شیره خرما","شیره خرما.","شیره‌ها","کیلوگرم","https://images.pexels.com/photos/20520971/pexels-photo-20520971.jpeg?cs=srgb&dl=pexels-visualstoriesbytugba-20520971.jpg&fm=jpg",110],
+  ["fig","انجیر","انجیر خشک منطقه.","خشکبار","کیلوگرم","https://images.pexels.com/photos/4499221/pexels-photo-4499221.jpeg?cs=srgb&dl=pexels-shkrabaanthony-4499221.jpg&fm=jpg",120],
+  ["mulberry","توت خشک","توت خشک محلی.","خشکبار","کیلوگرم","https://images.pexels.com/photos/4499220/pexels-photo-4499220.jpeg?cs=srgb&dl=pexels-shkrabaanthony-4499220.jpg&fm=jpg",130]
 ];
 
 let schemaReady = false;
@@ -71,7 +71,7 @@ function securityHeaders(headers = {}) {
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
-    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' data: https://images.pexels.com; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
     ...headers
   };
 }
@@ -223,7 +223,7 @@ async function handleApi(request, env) {
       const price = body.priceToman === null || body.priceToman === "" ? null : Number(body.priceToman);
       const stock = body.stock === null || body.stock === "" ? null : Number(body.stock);
       const active = body.active === false ? 0 : 1;
-      if (name.length<2 || !unit || (price!==null && !isInt(price,1)) || (stock!==null && (!Number.isFinite(stock)||stock<0||stock>1000000)) || (image && !image.startsWith("/images/"))) return json({error:"نام، واحد، قیمت، موجودی یا مسیر تصویر معتبر نیست."},400);
+      if (name.length<2 || !unit || (price!==null && !isInt(price,1)) || (stock!==null && (!Number.isFinite(stock)||stock<0||stock>1000000)) || (image && !(image.startsWith("/images/") || image.startsWith("https://images.pexels.com/photos/")))) return json({error:"نام، واحد، قیمت، موجودی یا مسیر تصویر معتبر نیست."},400);
       await env.DB.prepare("UPDATE products SET name=?,description=?,category=?,unit=?,price_toman=?,stock=?,image=?,active=?,updated_at=? WHERE id=?")
         .bind(name,description,category,unit,price,stock,image,active,now(),id).run();
       return json({ok:true});
