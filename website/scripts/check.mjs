@@ -34,7 +34,8 @@ const migration=read("website/supabase/migrations/20261107154357_storefront_orde
 const credits=read("website/public/credits.html");
 const robots=read("website/public/robots.txt");
 
-const productIds=[...migration.matchAll(/\('([a-z0-9-]+)','/g)].map(m=>m[1]);
+const seedBlock=migration.split("ON CONFLICT (id) DO NOTHING;")[0];
+const productIds=[...seedBlock.matchAll(/\('([a-z0-9-]+)','/g)].map(m=>m[1]);
 if(productIds.length!==13)throw new Error("Expected 13 seeded products, found "+productIds.length);
 if(new Set(productIds).size!==productIds.length)throw new Error("Duplicate product IDs in migration");
 if(!wrangler.includes('name = "padnakasht-store"'))throw new Error("Worker name mismatch");
