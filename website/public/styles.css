@@ -175,3 +175,9 @@ img{display:block;max-width:100%}
   .checkout-modal{padding:20px}.checkout-form .form-row{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+
+.image-missing{background:linear-gradient(135deg,#e5ddce,#f2ede3);position:relative}
+.image-missing:before{content:"پادناکِشت";position:absolute;inset:0;display:grid;place-items:center;color:#8d8a7c;font-size:14px}
+.toast{position:fixed;z-index:80;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#263b2d;color:#fff;padding:11px 20px;border-radius:999px;font-size:11px;box-shadow:var(--shadow);transition:opacity .2s,transform .2s}
+.toast.visible{opacity:1;transform:translate(-50%,0)}
+@media(max-width:600px){.toast{width:max-content;max-width:calc(100% - 30px);text-align:center;white-space:normal}}
