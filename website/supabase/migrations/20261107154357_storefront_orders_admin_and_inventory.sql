@@ -31,8 +31,6 @@ CREATE TABLE IF NOT EXISTS public.store_rate_limits (
 );
 ALTER TABLE public.store_rate_limits ENABLE ROW LEVEL SECURITY;
 
-CREATE INDEX IF NOT EXISTS idx_store_orders_created_at ON public.orders(created_at DESC);
-CREATE INDEX IF NOT EXISTS idx_store_orders_status ON public.orders(status);
 CREATE INDEX IF NOT EXISTS idx_store_products_active_sort ON public.products(active,sort_order);
 
 INSERT INTO public.products(id,name,description,category,price_toman,stock,image_url,active,unit,price_confirmed,stock_confirmed,sort_order,updated_at)
