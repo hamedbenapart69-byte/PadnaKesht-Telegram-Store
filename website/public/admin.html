@@ -10,7 +10,17 @@
 <body class="admin-body">
   <header class="admin-header"><a class="brand" href="/"><span class="brand-mark">پ</span><span class="brand-copy"><strong>پادناکِشت</strong><small>پنل مدیریت فروشگاه</small></span></a><a href="/" class="back-link">مشاهده فروشگاه ↗</a></header>
   <main class="admin-wrap">
-    <section class="login-card" id="login-card">
+    <section class="login-card" id="setup-card" hidden>
+      <span class="eyebrow">راه‌اندازی نخستین مدیر</span><h1>ساخت گذرواژه مدیر</h1><p>کد یک‌بارمصرف راه‌اندازی را وارد کنید و گذرواژه اختصاصی خودتان را بسازید.</p>
+      <form id="setup-form">
+        <label>کد یک‌بارمصرف<input name="setupToken" type="password" required autocomplete="off"></label>
+        <label>گذرواژه جدید<input name="password" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></label>
+        <label>تکرار گذرواژه<input name="passwordConfirm" type="password" required minlength="12" maxlength="128" autocomplete="new-password"></label>
+        <p class="form-feedback" id="setup-feedback" role="status"></p>
+        <button class="button button-dark full-width" type="submit">راه‌اندازی پنل مدیریت</button>
+      </form>
+    </section>
+    <section class="login-card" id="login-card" hidden>
       <span class="eyebrow">دسترسی محدود</span><h1>ورود مدیر</h1><p>برای مدیریت محصولات و سفارش‌ها، گذرواژه مدیر را وارد کنید.</p>
       <form id="login-form"><label>گذرواژه<input name="password" type="password" required autocomplete="current-password"></label><p class="form-feedback" id="login-feedback" role="status"></p><button class="button button-dark full-width" type="submit">ورود به پنل</button></form>
     </section>
