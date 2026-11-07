@@ -46,7 +46,7 @@
       const unavailable=p.stock!==null && Number(p.stock)<=0;
       const stockText=p.stock===null?"موجودی پس از ثبت درخواست بررسی می‌شود":(unavailable?"فعلاً ناموجود":"موجودی: "+digits(p.stock)+" "+escapeHtml(p.unit));
       const price=p.price_toman===null?"قیمت پس از هماهنگی":money(p.price_toman);
-      return '<article class="product-card"><div class="product-photo"><img loading="lazy" src="'+escapeHtml(p.image||"")+'" alt="'+escapeHtml(p.name)+'"></div>'+
+      return '<article class="product-card"><div class="product-photo"><img loading="lazy" src="'+escapeHtml(p.image||"")+'" alt="'+escapeHtml(p.name)+'"><span class="image-note">تصویر نمایشی</span></div>'+
         '<div class="product-category">'+escapeHtml(p.category||"محصول محلی")+'</div><h3>'+escapeHtml(p.name)+'</h3>'+
         '<p class="product-description">'+escapeHtml(p.description||"محصولی از تولیدکنندگان پادنا.")+'</p>'+
         '<div class="product-meta"><div class="product-price">'+price+'<small>به‌ازای هر '+escapeHtml(p.unit)+'</small></div><span class="stock-label">'+stockText+'</span></div>'+
