@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS public.store_admin_credentials (
   password_salt text,
   setup_token_hash text,
   session_secret text NOT NULL,
+  proxy_secret_hash text,
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 ALTER TABLE public.store_admin_credentials ENABLE ROW LEVEL SECURITY;
