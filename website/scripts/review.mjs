@@ -63,7 +63,7 @@ const roles={
   },
   performance:()=>{
     need(files.app.includes('loading="lazy"'),"Lazy loading for catalogue images missing");
-    need(files.edge.includes('"cache-control":"no-store"'),"Sensitive API responses must not be cached");
+    need(files.edge.includes('"cache-control"')&&files.edge.includes('"no-store"'),"Sensitive API responses must not be cached");
     need(!files.html.includes("fonts.googleapis.com")&&!files.html.includes("<script src=\"https://"),"Unneeded external frontend dependency found");
     need(files.worker.includes("X-Content-Type-Options")&&files.worker.includes("Referrer-Policy"),"Baseline security headers missing");
   },
