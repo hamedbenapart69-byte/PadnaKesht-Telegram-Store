@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#263b2d">
+  <meta name="description" content="پادناکِشت؛ محصولات محلی روستای خفر پادنا، از دل طبیعت دنا.">
+  <meta property="og:title" content="پادناکِشت | از دل طبیعت دنا">
+  <meta property="og:description" content="محصولات محلی پادنا، مستقیم از تولیدکنندگان روستا.">
+  <meta property="og:type" content="website">
+  <title>پادناکِشت | از دل طبیعت دنا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="announcement">محصولات محلی پادنا، از دست تولیدکنندگان روستا</div>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="پادناکِشت، صفحه اصلی">
+      <span class="brand-mark">پ</span>
+      <span class="brand-copy"><strong>پادناکِشت</strong><small>از دل طبیعت دنا</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="منوی اصلی">
+      <a href="#products">محصولات</a>
+      <a href="#story">قصه پادنا</a>
+      <a href="#how-to-order">راهنمای سفارش</a>
+    </nav>
+    <div class="header-actions">
+      <a class="icon-link" href="#track-order">پیگیری سفارش</a>
+      <button class="cart-trigger" id="cart-open" type="button" aria-label="باز کردن سبد خرید">
+        <span>سبد خرید</span><b id="cart-count">۰</b>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i></i> از روستای خفر پادنا</span>
+        <h1>طعمِ آشنا،<br><em>از دل طبیعت دنا</em></h1>
+        <p>محصولاتی که در خانه‌ها و کارگاه‌های کوچک پادنا آماده می‌شوند؛ بی‌واسطه از تولیدکنندگان روستا به دست شما می‌رسند.</p>
+        <a class="button button-light" href="#products">دیدن محصولات <span aria-hidden="true">←</span></a>
+        <div class="hero-note"><span class="note-line"></span><span>اهل پادنا؛ با دست‌های خودمان</span></div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-photo-frame">
+          <img src="/images/walnuts.jpg" alt="گردوهای محلی در ظرفی ساده روی میز چوبی">
+        </div>
+        <div class="hero-stamp"><span>پادنا</span><small>طبیعت، کار و زندگی</small></div>
+        <span class="hero-orbit orbit-one"></span><span class="hero-orbit orbit-two"></span>
+      </div>
+      <div class="hero-index">01 <span>/</span> 03</div>
+    </section>
+
+    <section class="trust-strip" aria-label="ویژگی‌های فروشگاه">
+      <div><span class="trust-number">۰۱</span><p><strong>از تولیدکننده</strong><small>بدون واسطه‌فروشی</small></p></div>
+      <div><span class="trust-number">۰۲</span><p><strong>ریشه در پادنا</strong><small>محصولات روستای خفر</small></p></div>
+      <div><span class="trust-number">۰۳</span><p><strong>هماهنگی پیش از تأیید</strong><small>قیمت، موجودی و ارسال شفاف</small></p></div>
+    </section>
+
+    <section class="products-section section-wrap" id="products">
+      <div class="section-heading">
+        <div><span class="eyebrow">چیزهایی از پادنا</span><h2>محصولات <em>ما</em></h2></div>
+        <p>هر محصول، قصه‌ای از زمین و دست‌های زحمت‌کش روستاست. قیمت و موجودی روز پیش از تأیید سفارش با شما هماهنگ می‌شود.</p>
+      </div>
+      <div class="catalog-toolbar">
+        <div class="category-filters" id="category-filters">
+          <button class="filter-chip active" data-category="all" type="button">همه محصولات</button>
+        </div>
+        <span class="catalog-count" id="catalog-count">در حال دریافت محصولات…</span>
+      </div>
+      <div class="product-grid" id="product-grid" aria-live="polite">
+        <div class="loading-state">در حال آماده‌کردن قفسه‌های پادنا…</div>
+      </div>
+    </section>
+
+    <section class="story-section" id="story">
+      <div class="story-image">
+        <img src="/images/village.jpg" alt="چشم‌اندازی روستایی از دامنه‌های کوهستانی">
+        <span class="image-caption">پادنا؛ جایی میان کوه و زندگی</span>
+      </div>
+      <div class="story-copy">
+        <span class="eyebrow">قصه‌ای از خفر</span>
+        <h2>از دل روستا،<br><em>با دست‌های خودمان</em></h2>
+        <p>پادناکِشت از دل روستای خفر پادنا شکل گرفته؛ جایی که محصول، حاصل فصل و زحمت آدم‌هایی است که سال‌هاست با زمین و طبیعت زندگی می‌کنند.</p>
+        <p>ما محصولات را از خود تولیدکنندگان روستا معرفی و عرضه می‌کنیم؛ ساده و روشن، همان‌طور که هست.</p>
+        <div class="signature">پادناکِشت <span>از دل طبیعت دنا</span></div>
+      </div>
+    </section>
+
+    <section class="how-section section-wrap" id="how-to-order">
+      <div class="section-heading compact">
+        <div><span class="eyebrow">خرید بی‌دردسر</span><h2>چطور <em>سفارش بدهم؟</em></h2></div>
+        <p>ثبت درخواست در سایت به معنی تأیید نهایی قیمت یا موجودی نیست؛ همه جزئیات قبل از قطعی‌شدن سفارش با شما هماهنگ می‌شود.</p>
+      </div>
+      <div class="steps-grid">
+        <article><span>۱</span><h3>انتخاب محصول</h3><p>محصولات دلخواه را به سبد خرید اضافه کنید و مقدار را مشخص کنید.</p></article>
+        <article><span>۲</span><h3>ثبت درخواست</h3><p>نام، شماره تماس و نشانی تحویل را وارد کنید تا درخواست شما ثبت شود.</p></article>
+        <article><span>۳</span><h3>هماهنگی نهایی</h3><p>قیمت روز، موجودی و هزینه ارسال با شما بررسی و تأیید می‌شود.</p></article>
+      </div>
+    </section>
+
+    <section class="track-section" id="track-order">
+      <div class="track-copy"><span class="eyebrow">سفارش قبلی</span><h2>پیگیری <em>سفارش</em></h2><p>کد سفارشی را که پس از ثبت درخواست دریافت کرده‌اید، همراه شماره تماس وارد کنید.</p></div>
+      <form id="track-form" class="track-form">
+        <label>کد سفارش<input name="code" placeholder="مثلاً PK-A1B2C3D4" required autocomplete="off"></label>
+        <label>شماره تماس<input name="phone" placeholder="شماره‌ای که ثبت کرده‌اید" required inputmode="tel" autocomplete="tel"></label>
+        <button class="button button-dark" type="submit">پیگیری وضعیت</button>
+        <p class="form-feedback" id="track-feedback" role="status"></p>
+      </form>
+    </section>
+
+    <section class="contact-band">
+      <div><span class="eyebrow">حرفی، پرسشی، سفارشی؟</span><h2>ما از همان حوالیِ پادنا هستیم.</h2></div>
+      <div class="contact-meta"><span>ایتا</span><strong>@Padena_kesht1</strong><small>برای هماهنگی و پرسش درباره محصولات</small></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand footer-brand" href="/"><span class="brand-mark">پ</span><span class="brand-copy"><strong>پادناکِشت</strong><small>از دل طبیعت دنا</small></span></a>
+    <p>محصولات محلی پادنا، از تولیدکنندگان روستای خفر.</p>
+    <span class="footer-copy">© پادناکِشت</span>
+  </footer>
+
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="سبد خرید" aria-hidden="true">
+    <div class="drawer-head"><div><span class="eyebrow">انتخاب‌های شما</span><h2>سبد خرید</h2></div><button class="close-button" id="cart-close" type="button" aria-label="بستن">×</button></div>
+    <div class="cart-lines" id="cart-lines"><div class="empty-cart">هنوز محصولی انتخاب نکرده‌اید.</div></div>
+    <div class="drawer-footer"><div class="cart-estimate"><span>جمع برآوردی کالاها</span><strong id="cart-subtotal">پس از تأیید قیمت</strong></div><p>هزینه ارسال و مبلغ نهایی پیش از تأیید سفارش اعلام می‌شود.</p><button class="button button-dark full-width" id="checkout-open" type="button" disabled>ادامه و ثبت درخواست</button></div>
+  </aside>
+
+  <div class="modal-backdrop" id="checkout-modal" hidden>
+    <section class="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+      <div class="modal-head"><div><span class="eyebrow">یک قدم تا هماهنگی</span><h2 id="checkout-title">اطلاعات سفارش</h2></div><button class="close-button" id="checkout-close" type="button" aria-label="بستن">×</button></div>
+      <form id="checkout-form" class="checkout-form">
+        <div class="form-row"><label>نام و نام خانوادگی<input name="customerName" required maxlength="100" autocomplete="name"></label><label>شماره تماس<input name="phone" required maxlength="24" inputmode="tel" autocomplete="tel"></label></div>
+        <div class="form-row"><label>شهر<input name="city" required maxlength="80" autocomplete="address-level2"></label><label>روش تحویل<select name="deliveryMethod" required><option value="isfahan">تحویل در اصفهان</option><option value="post">ارسال به شهرهای دیگر</option></select></label></div>
+        <label>نشانی کامل<textarea name="address" required minlength="5" maxlength="500" rows="3" autocomplete="street-address"></textarea></label>
+        <label>توضیحات بیشتر <span class="optional">(اختیاری)</span><textarea name="notes" maxlength="500" rows="2" placeholder="مثلاً زمان مناسب تماس یا توضیح سفارش"></textarea></label>
+        <div class="checkout-notice">پس از ثبت درخواست، قیمت روز، موجودی و هزینه ارسال با شما هماهنگ می‌شود. تا پیش از تأیید نهایی، پرداختی انجام ندهید.</div>
+        <p class="form-feedback" id="checkout-feedback" role="status"></p>
+        <button class="button button-dark full-width" type="submit">ثبت درخواست خرید</button>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="success-modal" hidden>
+    <section class="success-modal" role="dialog" aria-modal="true" aria-labelledby="success-title">
+      <div class="success-mark">✓</div><span class="eyebrow">درخواست دریافت شد</span><h2 id="success-title">ممنون از انتخابت</h2>
+      <p id="success-message">درخواست شما ثبت شد.</p>
+      <div class="order-code"><small>کد پیگیری سفارش</small><strong id="success-code"></strong><button id="copy-order-code" type="button">کپی کد</button></div>
+      <button class="button button-dark full-width" id="success-close" type="button">بازگشت به فروشگاه</button>
+    </section>
+  </div>
+</body>
+</html>
