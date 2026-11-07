@@ -82,6 +82,8 @@ jobs:
     steps:
       - name: Checkout validated commit
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Publish verified release branch
         run: |
           git fetch origin website-release || true
