@@ -34,12 +34,10 @@ jobs:
         run: |
           node --check website/public/app.js
           node --check website/public/admin.js
-      - name: Check storefront contracts
-        run: node website/scripts/check.mjs
       - name: Type-check Supabase Edge Function
         working-directory: website/supabase/functions/store-api
         run: deno check --node-modules-dir=auto index.ts
-      - name: Verify embedded static assets match source files
+      - name: Validate storefront contracts and embedded assets
         run: node website/scripts/check.mjs
 
   independent-reviewers:
