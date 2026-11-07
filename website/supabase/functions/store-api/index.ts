@@ -302,7 +302,14 @@ async function serveStatic(req:Request){
 }
 Deno.serve(async (req: Request) => {
   if (!SUPABASE_URL || !SERVICE_KEY) return json({error:"سرویس پایگاه داده پیکربندی نشده است."},503);
-  if(req.method==="GET"||req.method==="HEAD")return await serveStatic(req);
+  if(req.method==="GET"||req.method==="HEAD"){
+    const url=new URL(req.url);
+    if(req.method==="GET"&&url.searchParams.get("health")==="1"){
+      try{return await handle({path:"/api/health",method:"GET",body:{}},req);}
+      catch(error){return json({error:errorMessage(error)},500);}
+    }
+    return await serveStatic(req);
+  }
   if(req.method!=="POST")return json({error:"Method Not Allowed"},405);
   if(req.headers.get("apikey")!==PUBLIC_API_KEY)return json({error:"کلید عمومی درخواست معتبر نیست."},401);
   let payload:any;
