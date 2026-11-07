@@ -20,15 +20,18 @@ const migration=read("website/supabase/migrations/20261107154357_storefront_orde
 const credits=read("website/public/credits.html"),robots=read("website/public/robots.txt");
 const config=read("website/supabase/config.toml");
 const seedBlock=migration.split("ON CONFLICT (id) DO NOTHING;")[0];
-const ids=[...seedBlock.matchAll(/\\('([a-z0-9-]+)','/g)].map(m=>m[1]);
+const ids=[...seedBlock.matchAll(/\('([a-z0-9-]+)','/g)].map(m=>m[1]);
 if(ids.length!==13||new Set(ids).size!==13)throw new Error("Expected exactly 13 unique seeded products");
 if(!edge.includes("STATIC_ASSETS")||!edge.includes("serveStatic"))throw new Error("Static storefront hosting missing");
 if(!edge.includes("SUPABASE_SERVICE_ROLE_KEY")||!edge.includes("PUBLIC_API_KEY")||!edge.includes('req.headers.get("apikey")'))throw new Error("Supabase API access guard missing");
 if(!edge.includes("PBKDF2")||!edge.includes("310000")||!edge.includes("HMAC")||!edge.includes("isAdmin"))throw new Error("Admin authentication protections missing");
 if(!edge.includes("consume_store_rate_limit")||!config.includes("verify_jwt = false"))throw new Error("API rate limiting or custom authentication config missing");
-const mapStart=edge.indexOf("const STATIC_ASSETS:Record<string,string>=")+ "const STATIC_ASSETS:Record<string,string>=".length;
-const mapEnd=edge.indexOf(";\\nconst STATIC_TYPES",mapStart);
-if(mapStart<0||mapEnd<0)throw new Error("Embedded static asset map cannot be parsed");
+const marker="const STATIC_ASSETS:Record<string,string>=";
+const markerAt=edge.indexOf(marker);
+if(markerAt<0)throw new Error("Embedded static asset map is missing");
+const mapStart=markerAt+marker.length;
+const mapEnd=edge.indexOf(";\nconst STATIC_TYPES",mapStart);
+if(mapEnd<0)throw new Error("Embedded static asset map cannot be parsed");
 const embedded=JSON.parse(edge.slice(mapStart,mapEnd));
 for(const name of ["index.html","admin.html","credits.html","styles.css","admin.css","app.js","admin.js"]){
  if(embedded[name]!==read("website/public/"+name))throw new Error("Deployed asset is stale: "+name);
