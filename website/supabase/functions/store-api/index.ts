@@ -75,7 +75,8 @@ async function rateLimit(key: string, limit: number, seconds: number) {
   return data === true;
 }
 async function requestIp(req: Request) {
-  return await sha256(clean(req.headers.get("x-client-ip") || "unknown",100));
+  const forwarded=req.headers.get("cf-connecting-ip")||req.headers.get("x-forwarded-for")||req.headers.get("x-real-ip")||"unknown";
+  return await sha256(clean(forwarded.split(",")[0],100));
 }
 function errorMessage(error: unknown) {
   const m = String((error as Error)?.message || error || "");
@@ -94,11 +95,6 @@ async function handle(payload: any, req: Request) {
   const session = clean(req.headers.get("x-admin-session"),2000);
   const ipHash = await requestIp(req);
   const credential = await credentials();
-  const proxySecret = clean(req.headers.get("x-store-proxy-secret"),200);
-  if (!credential.proxy_secret_hash || !safeEqual(await sha256(proxySecret),credential.proxy_secret_hash)) {
-    return json({error:"درخواست از مسیر مجاز ارسال نشده است."},403);
-  }
-
   if (path === "/api/health" && method === "GET") {
     const {count,error} = await db.from("products").select("id",{count:"exact",head:true});
     if (error) throw error;
@@ -286,10 +282,38 @@ async function handle(payload: any, req: Request) {
   return json({error:"مسیر پیدا نشد."},404);
 }
 
+const PUBLIC_API_KEY="sb_publishable_Ttbile4UN76kwsZ0chw3DA_HfaqPUjA";
+const STATIC_TYPES:Record<string,string>={
+  "index.html":"text/html; charset=utf-8",
+  "admin.html":"text/html; charset=utf-8",
+  "credits.html":"text/html; charset=utf-8",
+  "styles.css":"text/css; charset=utf-8",
+  "admin.css":"text/css; charset=utf-8",
+  "app.js":"text/javascript; charset=utf-8",
+  "admin.js":"text/javascript; charset=utf-8"
+};
+const STATIC_HEADERS={
+  "X-Content-Type-Options":"nosniff",
+  "X-Frame-Options":"DENY",
+  "Referrer-Policy":"strict-origin-when-cross-origin",
+  "Permissions-Policy":"camera=(), microphone=(), geolocation=()",
+  "Content-Security-Policy":"default-src 'self'; img-src 'self' data: https://images.pexels.com; style-src 'self'; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+};
+async function serveStatic(req:Request){
+  const url=new URL(req.url);
+  const prefix="/functions/v1/store-api";
+  let name=decodeURIComponent(url.pathname.slice(prefix.length)).replace(/^\\/+/, "")||"index.html";
+  if(name.includes("/")||!Object.hasOwn(STATIC_TYPES,name))return new Response("Not found",{status:404,headers:STATIC_HEADERS});
+  try{
+    const content=await Deno.readTextFile(new URL("./public/"+name,import.meta.url));
+    return new Response(req.method==="HEAD"?null:content,{status:200,headers:{...STATIC_HEADERS,"content-type":STATIC_TYPES[name],"cache-control":name.endsWith(".html")?"no-cache":"public, max-age=3600"}});
+  }catch{return new Response("Not found",{status:404,headers:STATIC_HEADERS});}
+}
 Deno.serve(async (req: Request) => {
   if (!SUPABASE_URL || !SERVICE_KEY) return json({error:"سرویس پایگاه داده پیکربندی نشده است."},503);
-  if (req.headers.get("origin")) return json({error:"درخواست مستقیم از مرورگر پذیرفته نمی‌شود."},403);
-  if (req.method!=="POST") return json({error:"Method Not Allowed"},405);
+  if(req.method==="GET"||req.method==="HEAD")return await serveStatic(req);
+  if(req.method!=="POST")return json({error:"Method Not Allowed"},405);
+  if(req.headers.get("apikey")!==PUBLIC_API_KEY)return json({error:"کلید عمومی درخواست معتبر نیست."},401);
   let payload:any;
   try { payload=await req.json(); } catch { return json({error:"درخواست معتبر نیست."},400); }
   try { return await handle(payload,req); }
