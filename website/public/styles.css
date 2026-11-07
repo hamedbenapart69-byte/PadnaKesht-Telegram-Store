@@ -181,3 +181,6 @@ img{display:block;max-width:100%}
 .toast{position:fixed;z-index:80;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#263b2d;color:#fff;padding:11px 20px;border-radius:999px;font-size:11px;box-shadow:var(--shadow);transition:opacity .2s,transform .2s}
 .toast.visible{opacity:1;transform:translate(-50%,0)}
 @media(max-width:600px){.toast{width:max-content;max-width:calc(100% - 30px);text-align:center;white-space:normal}}
+
+.image-note{position:absolute;z-index:2;left:20px;bottom:20px;background:rgba(251,249,244,.92);color:#716b5e;border:1px solid rgba(255,255,255,.7);border-radius:999px;padding:4px 9px;font-size:9px}
+.hero-photo-frame:after{content:"عکس نمایشی";position:absolute;left:14px;bottom:14px;background:rgba(251,249,244,.92);color:#716b5e;padding:4px 10px;border-radius:999px;font-size:9px}
