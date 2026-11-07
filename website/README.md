@@ -24,7 +24,7 @@
 - Edge Function با نام \`store-api\` فعال است و سورس آن در \`supabase/functions/store-api\` نگهداری می‌شود.
 - جدول‌های سفارش و محصول RLS فعال دارند و دسترسی عمومی مستقیم ندارند؛ درخواست‌ها از Edge Function با نقش سرویس انجام می‌شوند.
 - فایل migration در \`supabase/migrations\` نگهداری می‌شود.
-- \`SUPABASE_URL\` و کلید publishable در \`wrangler.toml\` قرار دارند؛ کلید service-role و گذرواژه مدیر در مخزن قرار نمی‌گیرند.
+- \`SUPABASE_URL\` و کلید publishable در \`wrangler.toml\` قرار دارند؛ کلید service-role و گذرواژه مدیر در مخزن قرار نمی‌گیرند. پس از ساخت Worker، در Settings → Variables and Secrets یک Secret با نام `STORE_PROXY_SECRET` اضافه کنید؛ مقدار آن را در مرحله تحویل دریافت می‌کنید. بدون این Secret، API عمداً درخواست‌ها را رد می‌کند.
 
 ## راه‌اندازی پنل مدیر
 1. پس از انتشار سایت، مسیر \`/admin.html\` را باز کنید.
