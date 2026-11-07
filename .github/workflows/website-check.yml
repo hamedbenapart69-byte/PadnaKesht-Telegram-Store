@@ -12,8 +12,12 @@ on:
       - "website/**"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   validate:
+    name: Build, type and deployment validation
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -39,3 +43,42 @@ jobs:
       - name: Validate Wrangler build
         working-directory: website
         run: npx --yes wrangler@4 deploy --dry-run --outdir /tmp/padnakasht-worker
+
+  independent-reviewers:
+    name: Reviewer / \${{ matrix.reviewer }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        reviewer:
+          - architecture
+          - security
+          - database
+          - orders
+          - inventory
+          - accessibility
+          - responsive
+          - images
+          - performance
+          - deployment
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run independent review
+        run: node website/scripts/review.mjs \${{ matrix.reviewer }}
+
+  publish-verified-release:
+    name: Publish branch only after all gates pass
+    needs: [validate, independent-reviewers]
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout validated commit
+        uses: actions/checkout@v4
+      - name: Publish verified release branch
+        run: |
+          git push origin HEAD:refs/heads/website-release --force
