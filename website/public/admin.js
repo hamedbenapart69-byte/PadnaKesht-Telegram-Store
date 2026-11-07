@@ -12,13 +12,37 @@
   };
   const feedback=(id,message,success=false)=>{const el=$(id);if(!el)return;el.textContent=message;el.classList.toggle("success",success);};
   function showDashboard(){
-    $("login-card").hidden=true;$("admin-dashboard").hidden=false;
+    $("login-card").hidden=true;$("setup-card").hidden=true;$("admin-dashboard").hidden=false;
     loadOrders();loadProducts();
   }
-  async function checkSession(){
-    try{const d=await api("/api/admin/session");if(d.authenticated)showDashboard();}
-    catch{}
+  function showLogin(){
+    $("admin-dashboard").hidden=true;$("setup-card").hidden=true;$("login-card").hidden=false;
   }
+  function showSetup(){
+    $("admin-dashboard").hidden=true;$("login-card").hidden=true;$("setup-card").hidden=false;
+  }
+  async function checkSession(){
+    try{
+      const d=await api("/api/admin/session");
+      if(d.authenticated)showDashboard();
+      else if(d.setupRequired)showSetup();
+      else showLogin();
+    }catch(error){
+      showLogin();feedback("login-feedback",error.message);
+    }
+  }
+  $("setup-form").addEventListener("submit",async event=>{
+    event.preventDefault();
+    const form=event.currentTarget,fd=new FormData(form),button=form.querySelector("button");
+    const password=String(fd.get("password")||""),confirm=String(fd.get("passwordConfirm")||"");
+    if(password!==confirm){feedback("setup-feedback","گذرواژه و تکرار آن یکسان نیستند.");return;}
+    button.disabled=true;button.textContent="در حال راه‌اندازی…";feedback("setup-feedback","");
+    try{
+      const data=await api("/api/admin/setup",{method:"POST",body:JSON.stringify({setupToken:fd.get("setupToken"),password})});
+      form.reset();showLogin();feedback("login-feedback",data.message||"گذرواژه تنظیم شد؛ وارد شوید.",true);
+    }catch(error){feedback("setup-feedback",error.message);}
+    finally{button.disabled=false;button.textContent="راه‌اندازی پنل مدیریت";}
+  });
   $("login-form").addEventListener("submit",async event=>{
     event.preventDefault();const form=event.currentTarget,button=form.querySelector("button"),password=new FormData(form).get("password");
     button.disabled=true;feedback("login-feedback","در حال بررسی…");
@@ -28,7 +52,7 @@
   });
   $("logout-button").addEventListener("click",async()=>{
     try{await api("/api/admin/logout",{method:"POST",body:"{}"});}catch{}
-    $("admin-dashboard").hidden=true;$("login-card").hidden=false;
+    showLogin();
   });
   document.querySelectorAll(".admin-tabs button").forEach(button=>button.addEventListener("click",()=>{
     document.querySelectorAll(".admin-tabs button").forEach(x=>x.classList.toggle("active",x===button));
