@@ -51,7 +51,7 @@ if(!app.includes("/api/orders")||!app.includes("/api/order-lookup")||!app.includ
 if(!edge.includes("confirm_store_order")||!edge.includes("transition_store_order")||!edge.includes("consume_store_rate_limit"))throw new Error("Order confirmation, stock or rate-limit RPC missing");
 if(!migration.includes("ENABLE ROW LEVEL SECURITY")||!migration.includes("REVOKE ALL ON FUNCTION"))throw new Error("Database access controls missing");
 if(!css.includes("[hidden]{display:none!important}")||!css.includes(".no-scroll"))throw new Error("Modal visibility or scroll styles missing");
-if(!credits.includes("Pexels License")||!credits.includes("عکس اختصاصی خفر نیست"))throw new Error("Photo credits/transparency missing");
+if(!credits.includes("Pexels License")||!credits.includes("عکس خفر پادنا نیست"))throw new Error("Photo credits/transparency missing");
 if(!robots.includes("Disallow: /admin.html"))throw new Error("Admin page robots exclusion missing");
 if(/on(click|load|error)=/i.test(html+adminHtml))throw new Error("Inline event handlers are not allowed");
 if(/ADMIN_PASSWORD\s*=\s*["']/.test(edge+worker+wrangler))throw new Error("Hard-coded admin password found");
