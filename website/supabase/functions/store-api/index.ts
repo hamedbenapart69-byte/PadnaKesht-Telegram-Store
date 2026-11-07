@@ -49,7 +49,7 @@ async function signSession(secretHex: string, payload: string) {
 }
 async function credentials() {
   const {data,error} = await db.from("store_admin_credentials")
-    .select("id,password_hash,password_salt,setup_token_hash,session_secret")
+    .select("id,password_hash,password_salt,setup_token_hash,session_secret,proxy_secret_hash")
     .eq("id",1).single();
   if (error || !data) throw new Error("ADMIN_CREDENTIALS_UNAVAILABLE");
   return data;
@@ -93,6 +93,11 @@ async function handle(payload: any, req: Request) {
   const body = payload?.body || {};
   const session = clean(req.headers.get("x-admin-session"),2000);
   const ipHash = await requestIp(req);
+  const credential = await credentials();
+  const proxySecret = clean(req.headers.get("x-store-proxy-secret"),200);
+  if (!credential.proxy_secret_hash || !safeEqual(await sha256(proxySecret),credential.proxy_secret_hash)) {
+    return json({error:"درخواست از مسیر مجاز ارسال نشده است."},403);
+  }
 
   if (path === "/api/health" && method === "GET") {
     const {count,error} = await db.from("products").select("id",{count:"exact",head:true});
