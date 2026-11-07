@@ -8,6 +8,7 @@ const files={
   app:read("website/public/app.js"),admin:read("website/public/admin.js"),
   css:read("website/public/styles.css"),adminCss:read("website/public/admin.css"),edge:read("website/supabase/functions/store-api/index.ts"),
   migration:read("website/supabase/migrations/20261107154357_storefront_orders_admin_and_inventory.sql"),
+  proxyMigration:read("website/supabase/migrations/20261107155324_store_api_proxy_secret_guard.sql"),
   credits:read("website/public/credits.html"),robots:read("website/public/robots.txt"),
   config:read("website/supabase/config.toml")
 };
@@ -23,6 +24,7 @@ const roles={
     need(files.edge.includes("PBKDF2")&&files.edge.includes("310000"),"Password hashing parameters missing");
     need(files.edge.includes("HMAC")&&files.edge.includes("signSession")&&files.edge.includes("isAdmin"),"Signed admin session verification missing");
     need(files.edge.includes("consume_store_rate_limit")&&files.migration.includes("ENABLE ROW LEVEL SECURITY"),"Rate limit or RLS controls missing");
+    need(files.worker.includes("STORE_PROXY_SECRET")&&files.edge.includes("x-store-proxy-secret")&&files.proxyMigration.includes("proxy_secret_hash"),"Private Worker proxy authentication missing");
     need(!files.wrangler.includes("service_role")&&!/ADMIN_PASSWORD\s*=/.test(files.worker+files.wrangler),"Private credential found in deploy config");
     need(!/on(click|load|error)=/i.test(files.html+files.adminHtml),"Inline HTML event handler found");
   },
