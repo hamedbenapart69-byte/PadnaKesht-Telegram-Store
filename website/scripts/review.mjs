@@ -72,7 +72,6 @@ const roles={
     need(files.config.includes("verify_jwt = false")&&files.edge.includes("PUBLIC_API_KEY"),"Edge Function public-key gate is not configured");
     need(files.edge.includes("SUPABASE_SERVICE_ROLE_KEY")&&files.edge.includes("serveStatic"),"Supabase Edge deployment contract missing");
   }
-  }
 };
 function need(ok,message){if(!ok)throw new Error(message);}
 const role=process.argv[2];
