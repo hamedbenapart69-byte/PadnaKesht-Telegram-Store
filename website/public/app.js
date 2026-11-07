@@ -95,8 +95,8 @@
   function closeDrawer() {
     $("cart-drawer").classList.remove("open");$("cart-drawer").setAttribute("aria-hidden","true");$("drawer-backdrop").hidden=true;document.body.classList.remove("no-scroll");
   }
-  function openModal(id) { $(id).hidden=false;document.body.style.overflow="hidden"; }
-  function closeModal(id) { $(id).hidden=true;document.body.style.overflow=""; }
+  function openModal(id) { $(id).hidden=false;document.body.classList.add("no-scroll"); }
+  function closeModal(id) { $(id).hidden=true;document.body.classList.remove("no-scroll"); }
   function showSuccess(data) {
     $("success-code").textContent=data.order.id;
     $("success-message").textContent=data.message;
